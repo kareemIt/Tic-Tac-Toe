@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.css';
-import Square from '/Squares.js';
+import Square from '/Square.js';
 
 export default function App() {
   return (
