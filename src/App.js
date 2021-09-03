@@ -3,10 +3,6 @@ import './style.css';
 import Square from './component/Square.js';
 
 export default function App() {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [xIsNext, SetXIsNext] = useState(true);
-  const winner = winGame(board);
-
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -17,17 +13,32 @@ export default function App() {
     [0, 4, 8],
     [2, 4, 6]
   ];
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [xIsNext, SetXIsNext] = useState(true);
+  const winner = winGame(board);
 
-  function winGame(Square) {
+  const handleClick = () => {
+    const boardCopy = [...board];
+    if (winner || boardCopy[i]) return;
+    boardCopy[i] = xIsNext ? 'X' : 'O';
+    setBoard(boardCopy);
+    setXisNext(!xIsNext);
+  };
+
+  const renderMoves = () => (
+    <button onClick={() => setBoard(Array(9).fill(null))}>Start Game</button>
+  );
+
+  function winGame(board) {
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (
-        square[a] &&
-        Square[a] == square[b] &&
-        Square[b] == square[c] &&
-        Square[c]
+        board[a] &&
+        board[a] == board[b] &&
+        board[b] == board[c] &&
+        board[c]
       ) {
-        return Square[a];
+        return board[a];
       }
     }
     return;
@@ -35,15 +46,13 @@ export default function App() {
 
   return (
     <div className="Container">
-      <Square value={1} />
-      <Square value={2} />
-      <Square value={3} />
-      <Square value={4} />
-      <Square value={5} />
-      <Square value={6} />
-      <Square value={7} />
-      <Square value={8} />
-      <Square value={9} />
+      {board.map((boards, i) => {
+        return <Square key={i} value={boards} onClick={handleClick} />;
+      })}
+      <p>
+        {winner ? 'Winner:' + winner : 'Next Player:' + (xIsNext ? 'X' : '0')}
+      </p>
+      {renderMoves()}
     </div>
   );
 }
