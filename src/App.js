@@ -14,15 +14,15 @@ export default function App() {
     [2, 4, 6]
   ];
   const [board, setBoard] = useState(Array(9).fill(null));
-  const [xIsNext, SetXIsNext] = useState(true);
+  const [xIsNext, setXIsNext] = useState(true);
   const winner = winGame(board);
 
-  const handleClick = () => {
+  const handleClick = i => {
     const boardCopy = [...board];
     if (winner || boardCopy[i]) return;
     boardCopy[i] = xIsNext ? 'X' : 'O';
     setBoard(boardCopy);
-    setXisNext(!xIsNext);
+    setXIsNext(!xIsNext);
   };
 
   const renderMoves = () => (
@@ -30,15 +30,11 @@ export default function App() {
   );
 
   function winGame(board) {
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (
-        board[a] &&
-        board[a] == board[b] &&
-        board[b] == board[c] &&
-        board[c]
-      ) {
-        return board[a];
+    for (const [a, b, c] of lines) {
+      const piece = board[a];
+      if (!piece) continue;
+      if (piece == board[b] && board[b] == board[c]){
+        if (piece) return piece;
       }
     }
     return;
@@ -46,9 +42,9 @@ export default function App() {
 
   return (
     <div className="Container">
-      {board.map((boards, i) => {
-        return <Square key={i} value={boards} onClick={handleClick} />;
-      })}
+      {board.map((letter, i) => (
+        <Square key={i} value={letter} onClick={() => handleClick(i)} />
+      ))}
       <p>
         {winner ? 'Winner:' + winner : 'Next Player:' + (xIsNext ? 'X' : '0')}
       </p>
